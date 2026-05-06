@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BalNet – Balparmak Dijital Çalışma Platformu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+
+  <style>
+    /* ── RESET ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+
+    /* ── TOKENS ── */
+    :root {
+      --gold:        #C4963E;
+      --gold-lt:     #E8C97A;
+      --gold-pale:   #FAF5E8;
+      --gold-deep:   #A07830;
+      --orange:      #FFA400;
+      --orange-lt:   #FFF3C8;
+      --dark:        #2C2318;
+      --dark2:       #3A3429;
+      --dark3:       #4A4035;
+      --brown:       #6D6351;
+      --mid:         #9C8851;
+      --warm-gray:   #D7D4C2;
+      --bg:          #F0ECE0;
+      --bg2:         #EAE5D8;
+      --cream:       #FDFAF4;
+      --white:       #FFFFFF;
+      --border:      #DDD9C8;
+      --border2:     #E8E4D8;
+      --text:        #2C2318;
+      --text2:       #5A5040;
+      --text3:       #8A7D6A;
+      --shadow-sm:   0 1px 4px rgba(60,40,10,0.07);
+      --shadow-md:   0 3px 12px rgba(60,40,10,0.10);
+      --shadow-lg:   0 6px 24px rgba(60,40,10,0.13);
+      --radius:      10px;
+      --radius-sm:   6px;
+      --font-display: 'Crimson Pro', Georgia, serif;
+      --font-body:    'DM Sans', system-ui, sans-serif;
+    }
+
+    body {
+      font-family: var(--font-body);
+      font-size: 14px;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HEADER ── */
+    .hd {
+      background: var(--dark2);
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      border-bottom: 3px solid var(--gold);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      flex-shrink: 0;
+    }
+
+    .hd-left { display: flex; align-items: center; gap: 14px; }
+
+    .hd-honeycomb {
+      width: 34px; height: 34px;
+      background: var(--gold);
+      clip-path: polygon(50% 0%,93% 25%,93% 75%,50% 100%,7% 75%,7% 25%);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+      transition: background 0.2s;
+    }
+    .hd-honeycomb:hover { background: var(--gold-lt); }
+
+    .hd-brand {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--gold-lt);
+      letter-spacing: 0.5px;
+      line-height: 1;
+    }
+
+    .hd-sep { width: 1px; height: 28px; background: rgba(196,150,62,0.3); }
+
+    .hd-subtitle {
+      color: rgba(232,201,122,0.60);
+      font-size: 12px;
+      font-weight: 300;
+      letter-spacing: 0.15px;
+    }
+
+    .hd-right { display: flex; align-items: center; gap: 16px; }
+
+    .hd-icon-btn {
+      position: relative;
+      color: rgba(255,255,255,0.55);
+      font-size: 20px;
+      cursor: pointer;
+      transition: color 0.15s;
+      display: flex; align-items: center;
+    }
+    .hd-icon-btn:hover { color: var(--gold-lt); }
+
+    .hd-badge {
+      position: absolute; top: -5px; right: -6px;
+      background: var(--orange);
+      color: white;
+      font-size: 9px; font-weight: 600;
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      border: 2px solid var(--dark2);
+    }
+
+    .hd-user {
+      display: flex; align-items: center; gap: 8px;
+      padding: 4px 12px 4px 4px;
+      border-radius: 999px;
+      border: 1px solid rgba(196,150,62,0.25);
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .hd-user:hover { background: rgba(196,150,62,0.12); border-color: rgba(196,150,62,0.5); }
+
+    .hd-avatar {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      background: var(--gold);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 600;
+      color: var(--dark);
+    }
+
+    .hd-uname { color: rgba(255,255,255,0.80); font-size: 13px; font-weight: 400; }
+    .hd-chevron { font-size: 12px; color: rgba(255,255,255,0.35); }
+
+    /* ── SEARCH ── */
+    .srch-wrap {
+      background: var(--cream);
+      padding: 16px 28px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .srch-box {
+      display: flex;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1.5px solid var(--warm-gray);
+      background: var(--white);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .srch-box:focus-within {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(196,150,62,0.12);
+    }
+
+    .srch-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      padding: 11px 18px;
+      font-size: 14px;
+      font-family: var(--font-body);
+      color: var(--text);
+      background: transparent;
+    }
+    .srch-input::placeholder { color: #b8af9e; }
+
+    .srch-btn {
+      background: var(--gold);
+      border: none;
+      padding: 0 22px;
+      cursor: pointer;
+      color: white;
+      font-size: 19px;
+      display: flex; align-items: center;
+      transition: background 0.15s;
+    }
+    .srch-btn:hover { background: var(--gold-deep); }
+
+    /* ── MAIN BODY ── */
+    .main { flex: 1; padding: 22px 28px 28px; overflow-y: auto; }
+
+    /* ── GRIDS ── */
+    .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 16px; }
+    .grid3b { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 22px; }
+
+    /* ── WIDGET CARD ── */
+    .wc {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      transition: box-shadow 0.2s;
+    }
+    .wc:hover { box-shadow: var(--shadow-md); }
+
+    .wc-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border2);
+      background: var(--cream);
+    }
+
+    .wc-ttl {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; font-weight: 500;
+      color: var(--dark);
+    }
+
+    .wc-ico {
+      width: 26px; height: 26px;
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+    .ic-gold   { background: var(--gold-pale); color: var(--gold); }
+    .ic-orange { background: var(--orange-lt); color: #B07000; }
+    .ic-brown  { background: #F0EBE0; color: var(--brown); }
+    .ic-blue   { background: #E8F2FF; color: #1A6BBD; }
+    .ic-green  { background: #EAF5EC; color: #2D7A22; }
+    .ic-red    { background: #FEF0F0; color: #C0392B; }
+
+    .wc-more {
+      font-size: 18px; color: var(--warm-gray);
+      cursor: pointer; letter-spacing: 1.5px; line-height: 1;
+      transition: color 0.15s;
+    }
+    .wc-more:hover { color: var(--brown); }
+
+    .wc-body { padding: 10px 16px; }
+
+    /* ── ROWS ── */
+    .row {
+      display: flex; align-items: center; gap: 9px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border2);
+      transition: background 0.1s;
+    }
+    .row:last-child { border-bottom: none; padding-bottom: 0; }
+    .row:hover { background: var(--gold-pale); margin: 0 -16px; padding-left: 16px; padding-right: 16px; }
+
+    .row-ico {
+      width: 22px; height: 22px;
+      border-radius: 4px;
+      border: 1.5px solid var(--gold-lt);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .row-ico i { font-size: 11px; color: var(--gold); }
+    .row-txt { font-size: 13px; color: var(--text2); flex: 1; }
+
+    /* ── STATUS BADGES ── */
+    .badge {
+      font-size: 10px; padding: 2px 9px;
+      border-radius: 999px; font-weight: 500;
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .badge-acil    { background: #FEECEB; color: #C0392B; }
+    .badge-bekliyor{ background: var(--orange-lt); color: #B07000; }
+    .badge-yeni    { background: #EAF5EC; color: #2D7A22; }
+    .badge-gncl    { background: #E8F2FF; color: #1A6BBD; }
+
+    /* ── CHECKBOX ROWS ── */
+    .cb-row {
+      display: flex; align-items: center; gap: 9px;
+      padding: 8px 0; border-bottom: 1px solid var(--border2);
+    }
+    .cb-row:last-child { border-bottom: none; }
+
+    .cb {
+      width: 17px; height: 17px;
+      border-radius: 4px;
+      border: 1.5px solid var(--warm-gray);
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .cb.done { background: var(--gold); border-color: var(--gold); }
+    .cb.done i { font-size: 10px; color: white; }
+
+    .cb-txt { font-size: 13px; color: var(--text2); cursor: pointer; }
+    .cb-txt.done { text-decoration: line-through; color: #b8b0a0; }
+
+    /* ── ANNOUNCEMENT ROWS ── */
+    .ann-row {
+      display: flex; align-items: flex-start; gap: 9px;
+      padding: 8px 0; border-bottom: 1px solid var(--border2);
+    }
+    .ann-row:last-child { border-bottom: none; }
+
+    .ann-icon { font-size: 15px; color: var(--orange); flex-shrink: 0; margin-top: 1px; }
+    .ann-icon.muted { color: var(--brown); }
+
+    .ann-content { flex: 1; }
+    .ann-title { font-size: 13px; color: var(--text2); }
+    .ann-meta  { font-size: 11px; color: var(--text3); margin-top: 2px; }
+
+    .ann-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--orange); flex-shrink: 0; margin-top: 5px; }
+    .ann-dot.read { background: var(--warm-gray); }
+
+    /* ── REPORT ROWS ── */
+    .rpt {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 11px;
+      border-radius: 7px;
+      border: 1px solid var(--border);
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .rpt:last-child { margin-bottom: 0; }
+    .rpt:hover { border-color: var(--gold); background: var(--gold-pale); transform: translateX(2px); }
+
+    .rpt-ico {
+      width: 32px; height: 32px;
+      border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; flex-shrink: 0;
+    }
+    .rpt-lbl { font-size: 13px; font-weight: 500; color: var(--dark); flex: 1; }
+    .rpt-arr { font-size: 14px; color: var(--warm-gray); transition: color 0.15s; }
+    .rpt:hover .rpt-arr { color: var(--gold); }
+
+    /* ── MEETING ROWS ── */
+    .mtg-row {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 8px 0; border-bottom: 1px solid var(--border2);
+    }
+    .mtg-row:last-child { border-bottom: none; }
+
+    .mtg-date { text-align: center; min-width: 36px; flex-shrink: 0; }
+    .mtg-day { font-size: 18px; font-weight: 600; color: var(--gold); line-height: 1.1; }
+    .mtg-mon { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.3px; }
+
+    .mtg-title { font-size: 13px; font-weight: 500; color: var(--dark); }
+    .mtg-sub   { font-size: 11px; color: var(--text3); margin-top: 2px; display: flex; align-items: center; gap: 4px; }
+
+    /* ── INFO ROWS ── */
+    .info-row {
+      display: flex; align-items: center; gap: 9px;
+      padding: 8px 0; border-bottom: 1px solid var(--border2);
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-txt  { font-size: 12px; color: var(--text2); flex: 1; }
+
+    /* ── HIZLI ERİŞİM ── */
+    .qs-title {
+      font-size: 13px; font-weight: 500;
+      color: var(--brown);
+      margin-bottom: 13px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .qs-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    .qs-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+
+    .qi {
+      display: flex; flex-direction: column; align-items: center; gap: 9px;
+      padding: 18px 8px 15px;
+      border-radius: var(--radius);
+      background: var(--white);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      transition: all 0.18s;
+      text-decoration: none;
+    }
+    .qi:hover {
+      border-color: var(--gold);
+      background: var(--gold-pale);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .qi-ico {
+      width: 44px; height: 44px;
+      border-radius: 11px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+    }
+
+    .qi-lbl { font-size: 12px; color: var(--brown); font-weight: 500; text-align: center; }
+
+    /* ── FOOTER ── */
+    .ft {
+      background: var(--dark2);
+      border-top: 1px solid rgba(196,150,62,0.2);
+      padding: 10px 28px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .ft-left { font-size: 11px; color: rgba(255,255,255,0.3); }
+    .ft-right { font-size: 11px; color: rgba(196,150,62,0.5); }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg2); }
+    ::-webkit-scrollbar-thumb { background: var(--warm-gray); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--mid); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .wc { animation: fadeUp 0.35s ease both; }
+    .grid3  .wc:nth-child(1) { animation-delay: 0.05s; }
+    .grid3  .wc:nth-child(2) { animation-delay: 0.10s; }
+    .grid3  .wc:nth-child(3) { animation-delay: 0.15s; }
+    .grid3b .wc:nth-child(1) { animation-delay: 0.20s; }
+    .grid3b .wc:nth-child(2) { animation-delay: 0.25s; }
+    .grid3b .wc:nth-child(3) { animation-delay: 0.30s; }
+    .qi { animation: fadeUp 0.35s ease both; }
+    .qi:nth-child(1) { animation-delay: 0.35s; }
+    .qi:nth-child(2) { animation-delay: 0.40s; }
+    .qi:nth-child(3) { animation-delay: 0.45s; }
+    .qi:nth-child(4) { animation-delay: 0.50s; }
+    .qi:nth-child(5) { animation-delay: 0.55s; }
+
+    /* ── CHECKBOX JS TOGGLE ── */
+    .cb { user-select: none; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .grid3, .grid3b { grid-template-columns: 1fr 1fr; }
+      .qs-grid { grid-template-columns: repeat(3, 1fr); }
+      .hd-subtitle { display: none; }
+    }
+    @media (max-width: 600px) {
+      .grid3, .grid3b { grid-template-columns: 1fr; }
+      .qs-grid { grid-template-columns: repeat(2, 1fr); }
+      .hd { padding: 0 16px; }
+      .main { padding: 16px; }
+      .srch-wrap { padding: 12px 16px; }
+      .ft { padding: 8px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════ HEADER ══════════════ -->
+  <header class="hd">
+    <div class="hd-left">
+      <div class="hd-logo" style="display:flex;align-items:center;gap:10px;">
+        <div class="hd-honeycomb">🍯</div>
+        <span class="hd-brand">BalNet</span>
+      </div>
+      <div class="hd-sep"></div>
+      <span class="hd-subtitle">Balparmak Dijital Çalışma Platformu</span>
+    </div>
+
+    <div class="hd-right">
+      <div class="hd-icon-btn" title="Bildirimler">
+        <i class="ti ti-bell"></i>
+        <div class="hd-badge">3</div>
+      </div>
+      <div class="hd-icon-btn" title="Mesajlar">
+        <i class="ti ti-mail"></i>
+        <div class="hd-badge">1</div>
+      </div>
+      <div class="hd-user">
+        <div class="hd-avatar">AY</div>
+        <span class="hd-uname">Ahmet Yılmaz</span>
+        <i class="ti ti-chevron-down hd-chevron"></i>
+      </div>
+    </div>
+  </header>
+
+  <!-- ══════════════ SEARCH ══════════════ -->
+  <div class="srch-wrap">
+    <div class="srch-box">
+      <input class="srch-input" type="text" placeholder="Doküman, süreç, rapor veya kişi ara…" />
+      <button class="srch-btn" aria-label="Ara">
+        <i class="ti ti-search"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- ══════════════ MAIN ══════════════ -->
+  <main class="main">
+
+    <!-- SATIR 1: Onaylarım | Görevlerim | Duyurular -->
+    <div class="grid3">
+
+      <!-- Onaylarım -->
+      <div class="wc">
+        <div class="wc-head">
+          <div class="wc-ttl">
+            <div class="wc-ico ic-gold"><i class="ti ti-clipboard-check"></i></div>
+            Onaylarım
+          </div>
+          <span class="wc-more" title="Tümünü Gör">···</span>
+        </div>
+        <div class="wc-body">
+          <div class="row">
+            <div class="row-ico"><i class="ti ti-check"></i></div>
+            <div class="row-txt">Satınalma Talebi Onayı</div>
+            <span class="badge badge-acil">Acil</span>
+          </div>
+          <div class="row">
+            <div class="row-ico"><i class="ti ti-check"></i></div>
+            <div class="row-txt">Masraf Fişi Onayı</div>
+            <span class="badge badge-bekliyor">Bekliyor</span>
+          </div>
+          <div class="row">
+            <div class="row-ico"><i class="ti ti-check"></i></div>
+            <div class="row-txt">Aktivite Talebi Bekliyor</div>
+            <span class="badge badge-bekliyor">Bekliyor</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Görevlerim -->
+      <div class="wc">
+        <div class="wc-head">
+          <div class="wc-ttl">
+            <div class="wc-ico ic-orange"><i class="ti ti-list-check"></i></div>
+            Görevlerim
+          </div>
+          <span class="wc-more" title="Tümünü Gör">···</span>
+        </div>
+        <div class="wc-body">
+          <div class="cb-row">
+            <div class="cb done" onclick="toggleCb(this)"><i class="ti ti-check"></i></div>
+            <span class="cb-txt done" onclick="toggleCb(this.previousElementSibling)">Haftalık satış raporu hazırlama</span>
+          </div>
+          <div class="cb-row">
+            <div class="cb done" onclick="toggleCb(this)"><i class="ti ti-check"></i></div>
+            <span class="cb-txt done" onclick="toggleCb(this.previousElementSibling)">Toplantı aksiyonlarını güncelleme</span>
+          </div>
+          <div class="cb-row">
+            <div class="cb" onclick="toggleCb(this)"></div>
+            <span class="cb-txt" onclick="toggleCb(this.previousElementSibling)">Tedarikçi değerlendirme formunu doldur</span>
+          </div>
+          <div class="cb-row">
+            <div class="cb" onclick="toggleCb(this)"></div>
+            <span class="cb-txt" onclick="toggleCb(this.previousElementSibling)">Mayıs bütçe planlamasına katıl</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Duyurular -->
+      <div class="wc">
+        <div class="wc-head">
+          <div class="wc-ttl">
+            <div class="wc-ico ic-brown"><i class="ti ti-speakerphone"></i></div>
+            Duyurular
+          </div>
+          <span class="wc-more" title="Tümünü Gör">···</span>
+        </div>
+        <div class="wc-body">
+          <div class="ann-row">
+            <i class="ti ti-news ann-icon"></i>
+            <div class="ann-content">
+              <div class="ann-title">CEO'dan Yeni Yıl Mesajı</div>
+              <div class="ann-meta">Genel Müdür · 2 gün önce</div>
+            </div>
+            <div class="ann-dot"></div>
+          </div>
+          <div class="ann-row">
+            <i class="ti ti-rocket ann-icon"></i>
+            <div class="ann-content">
+              <div class="ann-title">Yeni Ürün Lansmanı</div>
+              <div class="ann-meta">Pazarlama · 3 gün önce</div>
+            </div>
+            <div class="ann-dot"></div>
+          </div>
+          <div class="ann-row">
+            <i class="ti ti-users ann-icon muted"></i>
+            <div class="ann-content">
+              <div class="ann-title">Güncel İK Prosedürleri</div>
+              <div class="ann-meta">İnsan Kaynakları · 5 gün önce</div>
+            </div>
+            <div class="ann-dot read"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SATIR 2: Raporlar | Toplantılar | Bilgilendirmeler -->
+    <div class="grid3b">
+
+      <!-- Raporlar -->
+      <div class="wc">
+        <div class="wc-head">
+          <div class="wc-ttl">
+            <div class="wc-ico ic-blue"><i class="ti ti-chart-bar"></i></div>
+            Raporlar
+          </div>
+          <span class="wc-more" title="Tümünü Gör">···</span>
+        </div>
+        <div class="wc-body">
+          <div class="rpt">
+            <div class="rpt-ico ic-blue"><i class="ti ti-chart-pie"></i></div>
+            <div class="rpt-lbl">Satış Dashboardı</div>
+            <i class="ti ti-arrow-right rpt-arr"></i>
+          </div>
+          <div class="rpt">
+            <div class="rpt-ico ic-green"><i class="ti ti-building-factory"></i></div>
+            <div class="rpt-lbl">Üretim KPI Raporu</div>
+            <i class="ti ti-arrow-right rpt-arr"></i>
+          </div>
+          <div class="rpt">
+            <div class="rpt-ico ic-gold"><i class="ti ti-coin"></i></div>
+            <div class="rpt-lbl">Finansal Performans</div>
+            <i class="ti ti-arrow-right rpt-arr"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Toplantılar -->
+      <div class="wc">
+        <div class="wc-head">
+          <div class="wc-ttl">
+            <div class="wc-ico ic-orange"><i class="ti ti-calendar-event"></i></div>
+            Toplantılar
+          </div>
+          <span class="wc-more" title="Tümünü Gör">···</span>
+        </div>
+        <div class="wc-body">
+          <div class="mtg-row">
+            <div class="mtg-date">
+              <div class="mtg-day">7</div>
+              <div class="mtg-mon">Mayıs</div>
+            </div>
+            <div>
+              <div class="mtg-title">Haftalık Operasyon Toplantısı</div>
+              <div class="mtg-sub"><i class="ti ti-clock"></i> 10:00 – 11:00 · Salon A</div>
+            </div>
+          </div>
+          <div class="mtg-row">
+            <div class="mtg-date">
+              <div class="mtg-day">8</div>
+              <div class="mtg-mon">Mayıs</div>
+            </div>
+            <div>
+              <div class="mtg-title">Q2 Satış Değerlendirme</div>
+              <div class="mtg-sub"><i class="ti ti-clock"></i> 14:00 – 15:30 · Online</div>
+            </div>
+          </div>
+          <div class="mtg-row">
+            <div class="mtg-date">
+              <div class="mtg-day">12</div>
+              <div class="mtg-mon">Mayıs</div>
+            </div>
+            <div>
+              <div class="mtg-title">İSG Tatbikatı Bilgilendirme</div>
+              <div class="mtg-sub"><i class="ti ti-clock"></i> 10:00 – 10:30 · Üretim Sahası</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bilgilendirmeler -->
+      <div class="wc">
+        <div class="wc-head">
+          <div class="wc-ttl">
+            <div class="wc-ico ic-green"><i class="ti ti-info-circle"></i></div>
+            Bilgilendirmeler
+          </div>
+          <span class="wc-more" title="Tümünü Gör">···</span>
+        </div>
+        <div class="wc-body">
+          <div class="info-row">
+            <span class="badge badge-yeni">Yeni</span>
+            <div class="info-txt">BalNet beta kullanımı başladı — BT Ekibi</div>
+          </div>
+          <div class="info-row">
+            <span class="badge badge-gncl">Güncelleme</span>
+            <div class="info-txt">SAP bakımı 10 Mayıs 22:00 – 02:00</div>
+          </div>
+          <div class="info-row">
+            <span class="badge badge-bekliyor">Duyuru</span>
+            <div class="info-txt">Mayıs Ar-Ge bülteni yayınlandı</div>
+          </div>
+          <div class="info-row">
+            <span class="badge badge-yeni">Yeni</span>
+            <div class="info-txt">Power BI üretim raporu güncellendi</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ HIZLI ERİŞİM ══ -->
+    <div class="qs-title">Hızlı Erişim</div>
+    <div class="qs-grid">
+
+      <a class="qi" href="#" onclick="return false;">
+        <div class="qi-ico" style="background:var(--gold-pale);color:var(--gold);">
+          <i class="ti ti-folder-open"></i>
+        </div>
+        <span class="qi-lbl">Dokümanlar</span>
+      </a>
+
+      <a class="qi" href="#" onclick="return false;">
+        <div class="qi-ico" style="background:var(--orange-lt);color:#B07000;">
+          <i class="ti ti-settings-automation"></i>
+        </div>
+        <span class="qi-lbl">Süreçler</span>
+      </a>
+
+      <a class="qi" href="#" onclick="return false;">
+        <div class="qi-ico" style="background:#E8F2FF;color:#1A6BBD;">
+          <i class="ti ti-book-2"></i>
+        </div>
+        <span class="qi-lbl">Bilgi Kataloğu</span>
+      </a>
+
+      <a class="qi" href="#" onclick="return false;">
+        <div class="qi-ico" style="background:#F0EBE0;color:var(--brown);">
+          <i class="ti ti-school"></i>
+        </div>
+        <span class="qi-lbl">Eğitimler</span>
+      </a>
+
+      <a class="qi" href="#" onclick="return false;">
+        <div class="qi-ico" style="background:#EAF5EC;color:#2D7A22;">
+          <i class="ti ti-forms"></i>
+        </div>
+        <span class="qi-lbl">Formlar</span>
+      </a>
+
+    </div>
+  </main>
+
+  <!-- ══════════════ FOOTER ══════════════ -->
+  <footer class="ft">
+    <span class="ft-left">© 2025 Balparmak A.Ş. · BalNet v1.0</span>
+    <span class="ft-right">Balparmak Dijital Çalışma Platformu</span>
+  </footer>
+
+  <!-- ══════════════ JS ══════════════ -->
+  <script>
+    // Checkbox toggle
+    function toggleCb(cb) {
+      const isDone = cb.classList.contains('done');
+      const txt = cb.nextElementSibling;
+      if (isDone) {
+        cb.classList.remove('done');
+        cb.innerHTML = '';
+        if (txt) txt.classList.remove('done');
+      } else {
+        cb.classList.add('done');
+        cb.innerHTML = '<i class="ti ti-check"></i>';
+        if (txt) txt.classList.add('done');
+      }
+    }
+
+    // Search enter
+    document.querySelector('.srch-input').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && this.value.trim()) {
+        alert('Aranan: ' + this.value);
+      }
+    });
+
+    // Report row click feedback
+    document.querySelectorAll('.rpt').forEach(rpt => {
+      rpt.addEventListener('click', () => {
+        const lbl = rpt.querySelector('.rpt-lbl').textContent;
+        alert(lbl + ' raporu açılıyor…');
+      });
+    });
+  </script>
+</body>
+</html>
